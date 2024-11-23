@@ -17,9 +17,11 @@ with open('Encoder.pkl', 'rb') as file:
 def prediction(input_data):
     # Convert input_data to numpy array for prediction
     input_data = np.array(input_data, dtype='object')
+    encoded_data= label_encoder.tranform(input_data)
+    
 
     # Get prediction probability for class 1 (income >50K)
-    pred = model.predict_proba(input_data)[:, 1][0]
+    pred = model.predict_proba(encoded_data)[:, 1][0]
 
     # Check the prediction and return the appropriate message
     if pred > 0.5:
@@ -61,24 +63,7 @@ education = st.selectbox('Education:', ['Bachelors', 'Some-college', 'Doctorate'
                                         '12th', '1st-4th', '5th-6th', 'Preschool'])
 
 
-# Function to safely encode the input using the label encoder
-def safe_encode(encoder, value):
-    try:
-        return encoder.transform([value])[0]
-    except ValueError:
-        return encoder.transform(['unknown'])[0]
 
-
-
-# Encode categorical variables with safe encoding
-sex_encoded = safe_encode(label_encoder, sex)
-native_country_encoded = safe_encode(label_encoder, native_country)
-occupation_encoded = safe_encode(label_encoder, occupation)
-workclass_encoded = safe_encode(label_encoder, workclass)
-relationship_encoded = safe_encode(label_encoder, relationship)
-race_encoded = safe_encode(label_encoder, race)
-marital_status_encoded = safe_encode(label_encoder, marital_status)
-education_encoded = safe_encode(label_encoder, education)
 
 # Prepare input data for the model
 input_data = pd.DataFrame({
