@@ -87,8 +87,7 @@ input_data = pd.DataFrame({
     'education1': [education_encoded] 
 })
 
-
- if st.button('Predict'):
+if st.button('Predict'):
     response = prediction(input_data)
     st.success(response)
 
