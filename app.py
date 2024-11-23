@@ -12,6 +12,22 @@ with open('XGB Final model.pkl', 'rb') as file:
 with open('Encoder.pkl', 'rb') as file:
     label_encoder = pickle.load(file)
 
+
+# Define the prediction function
+def prediction(input_data):
+    # Convert input_data to numpy array for prediction
+    input_data = np.array(input_data, dtype='object')
+
+    # Get prediction probability for class 1 (income >50K)
+    pred = model.predict_proba(input_data)[:, 1][0]
+
+    # Check the prediction and return the appropriate message
+    if pred > 0.5:
+        return f'This individual is more likely to earn > 50K: Probability = {round(pred * 100, 2)}%'
+    else:
+        return f'This individual is less likely to earn > 50K: Probability = {round(pred * 100, 2)}%'
+
+
 # Streamlit UI
 st.title("Income Prediction Model")
 
@@ -68,20 +84,13 @@ input_data = pd.DataFrame({
     'relationship1': [relationship_encoded],
     'race1': [race_encoded],
     'marital-status2': [marital_status_encoded],
-    'education1': [education_encoded]  # We assume education-num is mapped similarly for education encoding
+    'education1': [education_encoded] 
 })
 
-# Prediction Button
-if st.button('Predict Income Level'):
-    try:
-        # Use predict_proba to get probabilities for both classes (income >50K or <=50K)
-        pred_proba = final_model.predict_proba(input_data)[:, 1][0]
 
-        # Display the probability
-        if pred_proba > 0.5:
-            st.success(f'This individual is more likely to earn > 50K: Probability = {round(pred_proba * 100, 2)}%')
-        else:
-            st.success(f'This individual is less likely to earn > 50K: Probability = {round(pred_proba * 100, 2)}%')
+ if st.button('Predict'):
+    response = prediction(input_data)
+    st.success(response)
 
-    except Exception as e:
-        st.error(f"Error during prediction: {str(e)}")
+if __name__ == '__main__':
+    main()
