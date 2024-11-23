@@ -7,7 +7,7 @@ from xgboost import XGBClassifier
 import pickle
 
 # Load the saved model and encoder
-with open('final_model_xgb.pkl', 'rb') as file:
+with open('XGB Final model.pkl', 'rb') as file:
     model = pickle.load(file)
 
 with open('Encoder.pkl', 'rb') as file:
