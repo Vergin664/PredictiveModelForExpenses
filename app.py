@@ -60,15 +60,25 @@ education = st.selectbox('Education:', ['Bachelors', 'Some-college', 'Doctorate'
                                         'Masters', '7th-8th', '10th', 'Assoc-acdm', '9th', '11th', 'Prof-school',
                                         '12th', '1st-4th', '5th-6th', 'Preschool'])
 
-# Encode categorical variables
-sex_encoded = label_encoder.transform([sex])[0]
-native_country_encoded = label_encoder.transform([native_country])[0]
-occupation_encoded = label_encoder.transform([occupation])[0]
-workclass_encoded = label_encoder.transform([workclass])[0]
-relationship_encoded = label_encoder.transform([relationship])[0]
-race_encoded = label_encoder.transform([race])[0]
-marital_status_encoded = label_encoder.transform([marital_status])[0]
-education_encoded = label_encoder.transform([education])[0]
+
+# Function to safely encode the input using the label encoder
+def safe_encode(encoder, value):
+    try:
+        return encoder.transform([value])[0]
+    except ValueError:
+        return encoder.transform(['unknown'])[0]
+
+
+
+# Encode categorical variables with safe encoding
+sex_encoded = safe_encode(label_encoder, sex)
+native_country_encoded = safe_encode(label_encoder, native_country)
+occupation_encoded = safe_encode(label_encoder, occupation)
+workclass_encoded = safe_encode(label_encoder, workclass)
+relationship_encoded = safe_encode(label_encoder, relationship)
+race_encoded = safe_encode(label_encoder, race)
+marital_status_encoded = safe_encode(label_encoder, marital_status)
+education_encoded = safe_encode(label_encoder, education)
 
 # Prepare input data for the model
 input_data = pd.DataFrame({
