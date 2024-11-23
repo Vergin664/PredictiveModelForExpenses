@@ -42,7 +42,7 @@ def prediction(input_data):
 # Main function to build the Streamlit app
 def main():
     st.title('Income Expense Prediction App')
-    st.image('image.jpg', use_column_width=True)
+    
 
     # User inputs
     age = st.number_input('Age:', min_value=0, max_value=120, value=39, step=1)
